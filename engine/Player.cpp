@@ -3,6 +3,9 @@
 
 Player::Player(sf::Vector2f pos_)
 {
+	shape.setRadius(100);
+	shape.setFillColor(sf::Color::Green);
+
 	pos = pos_;
 }
 
@@ -26,7 +29,8 @@ void Player::move() {
 	}
 }
 
-void Player::draw() {
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+void Player::draw(sf::RenderWindow &window) {
+	shape.setPosition(pos.x, pos.y);
+
+
 }
