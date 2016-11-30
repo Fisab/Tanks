@@ -1,45 +1,70 @@
-
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <vector>
-
+#include <SFML/Graphics.hpp>
 #include "engine/World.h"
 #include "engine/Player.h"
+#include "engine/cursor/Cursor.h"
+#include "engine/Menu.h"
+#include "engine/Settings.h"
 #include "engine/Camera.h"
-#include <SFML/Graphics.hpp>
 
-using namespace std;
+#include <iostream>
 
-int main()
+int main(int argc, char *argv[])
 {
-	Player player1(sf::Vector2f(100,1));
+	int screenSize[] = { 640, 640 };
+	int fps = 60;
+
+	sf::Clock clock;
+
+	Settings *settings = new Settings;
+	settings->getData(screenSize[0], screenSize[1], fps);
+	delete settings;
+
+	sf::RenderWindow window(sf::VideoMode(screenSize[0], screenSize[1]), "Tanks");
+	window.setActive(true);
+	window.setMouseCursorVisible(false);
+	window.setFramerateLimit(fps);
+
+	Menu *menu = new Menu(window, sf::Vector2i(screenSize[0], screenSize[1]));
+	menu->process();
+	delete menu;
 
 	World *map = new World;
-	map->loadMap("maps/vanilla.tmx");
+	map->loadMap("data/maps/test.tmx");
+	
+	Camera camera(sf::Vector2f(screenSize[0], screenSize[1]), sf::Vector2f(100, 100));
 
-	Camera camera(sf::Vector2f(1280, 780), sf::Vector2f(100, 100));
+	Cursor cursor("data/images/Cursor/cursor_pointer3D_shadow.png");
 
-	sf::RenderWindow window(sf::VideoMode(camera.screenSize.x, camera.screenSize.y), "Fisab");
-	window.setFramerateLimit(60);
+	Player tank(sf::Vector2f(100, 100));
 
-	while (window.isOpen())	{
+	while (window.isOpen())
+	{
+		float time = clock.getElapsedTime().asMicroseconds();
+		clock.restart();
+		time = time / 800;
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			else if (event.type == sf::Event::MouseWheelMoved) {
+				camera.moveWheel = event.mouseWheel.delta;
+			}
 		}
 
-		player1.process();
-		camera.update(player1.pos);
-
+		camera.update(tank.pos);
 		window.setView(camera.getView());
-		window.clear(sf::Color(135, 206, 235));
+
+		window.clear(sf::Color(119, 192, 200));
 
 		map->drawMap(window);
 
+		tank.process(window, time, &event);
+		cursor.process(window, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+
 		window.display();
 	}
+
 	return 0;
 }
