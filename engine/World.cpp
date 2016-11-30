@@ -1,23 +1,14 @@
 #include "World.h"
 #include <iostream>
 
-World::World(){}
+World::World() {}
 
 World::~World() {}
 
-int World::getHeightMap() {
-	return MAP_HEIGHT;
-}
-
-int World::getWidthMap() {
-	return MAP_WIDTH;
-}
-
 bool World::loadMap(char* mapName) {
 	pugi::xml_document doc;
-
 	if (!doc.load_file(mapName)) {
-		std::cout << mapName << " Map not found!\n";
+		std::cout << mapName << " Map not found!\n" << std::endl;
 		return false;
 	}
 
@@ -25,16 +16,16 @@ bool World::loadMap(char* mapName) {
 	pugi::xml_node tileset = map.child("tileset");
 
 	if (map == NULL) {
-		std::cout << "Map not found!\n";
-		return false;;
+		std::cout << "Map not found!\n" << std::endl;
+		return false;
 	}
 	if (tileset == NULL) {
-		std::cout << "Tileset not found!\n";
+		std::cout << "Tileset not found!\n" << std::endl;
 		return false;
 	}
 
-	MAP_WIDTH = map.attribute("width").as_int();
-	MAP_HEIGHT = map.attribute("height").as_int();
+	MAP_WIDTH = map.attribute("width").as_int() * 32;
+	MAP_HEIGHT = map.attribute("height").as_int() * 32;
 
 	while (tileset) {
 		Tileset tiles;
@@ -46,7 +37,7 @@ bool World::loadMap(char* mapName) {
 		tiles.tileSize.y = tileset.attribute("tileheight").as_int();
 
 		string tilePath = tileset.child("image").attribute("source").as_string();
-		tilePath.erase(0, 1);
+		//tilePath.erase(0, 1);
 
 		tiles.texture.loadFromFile(tilePath);
 
@@ -116,23 +107,22 @@ void World::setTextureTiles() {
 
 }
 
-void World::drawMap(sf::RenderWindow &game) {
-	x = y = 0;
-	for (auto layerTiles = layers.begin(); layerTiles != layers.end(); ++layerTiles) {
+void World::drawMap(sf::RenderWindow &window) {
+	int x = 0, y = 0;
+	for (auto layersTiles = layers.begin(); layersTiles != layers.end(); ++layersTiles) {
 		x = y = 0;
-		for (auto tileID = layerTiles->layer.begin(); tileID != layerTiles->layer.end(); tileID++) {
-			if (x == layerTiles->width) {
+		for (auto tile = layersTiles->layer.begin(); tile != layersTiles->layer.end(); tile++) {
+			if (x == layersTiles->width) {
 				x = 0;
 				y++;
 			}
-			if (*tileID == 0) {
+			if (*tile == 0) {
 				x++;
 				continue;
 			}
+			sprites.find(*tile)->second.setPosition(x * 32, y * 32);
 
-			sprites.find(*tileID)->second.setPosition(x * 64, y * 64);
-
-			game.draw(sprites.find(*tileID)->second);
+			window.draw(sprites.find(*tile)->second);
 			x++;
 		}
 	}
