@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include <SFML/Graphics.hpp>
+#include "World.h"
 
 class Camera
 {
@@ -9,16 +10,15 @@ public:
 	Camera(sf::Vector2f, sf::Vector2f);
 	~Camera();
 
-	//int screenSize[2];
+	void update(sf::Vector2f pos);
 
-	void update(sf::Vector2f);
-
+	int moveWheel = 0;
 
 	sf::Vector2f screenSize;
 	sf::Vector2f cameraPos;
-	sf::View & getView();
+	sf::View &getView();
 
-	float zoom = 1.5;
+	float zoom = 1;
 
 private:
 	sf::View camera;
