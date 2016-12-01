@@ -19,12 +19,14 @@ public:
 private:
 	const int startAngle = 90;
 	float angle = 0;
+	float towerAngle = 0;
 	float curSpeed;
 
 	void move(float time);
 	//bool checkCollision();
 
 	const float rotateSpeed = 0.03;
+	const float rotateTowerSpeed = 0.06;
 	const float speed = 2;
 	const int speedLimit = 2;
 	const float slip = 0.9;
@@ -37,6 +39,11 @@ private:
 
 	sf::Texture trailTexture;
 	sf::Sprite trailSprite;
+
+	sf::Texture towerTexture;
+	sf::Sprite towerSprite;
+
+	void rotateTower(sf::Vector2f posMouse, float time);
 
 	struct trail
 	{
