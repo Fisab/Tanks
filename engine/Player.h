@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <math.h>
+#include <algorithm>
 
 # define M_PI           3.141592653589793
 
@@ -28,9 +30,12 @@ private:
 	//bool checkCollision();
 
 	long double radToDeg(long double a);
+	long double abs(long double a);
+	long double getMin(long double a, long double b);
+	int getSign(int a);
 
 	const float rotateSpeed = M_PI / 6500;
-	const float rotateTowerSpeed = rotateSpeed*1.5;
+	const float rotateTowerSpeed = M_PI / 60;
 	const float speed = 2;
 	const int speedLimit = 2;
 	const float slip = 0.9;
