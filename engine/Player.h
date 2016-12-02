@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+# define M_PI           3.141592653589793
+
 class Player
 {
 public:
@@ -17,16 +19,18 @@ public:
 	void draw(sf::RenderWindow &window);
 
 private:
-	const int startAngle = 90;
-	float angle = 0;
-	float towerAngle = 0;
+	const long double startAngle = M_PI / 2;
+	long double angle = 0;
+	long double towerAngle = 0;
 	float curSpeed;
 
 	void move(float time);
 	//bool checkCollision();
 
-	const float rotateSpeed = 0.03;
-	const float rotateTowerSpeed = 0.06;
+	long double radToDeg(long double a);
+
+	const float rotateSpeed = M_PI / 6500;
+	const float rotateTowerSpeed = rotateSpeed*1.5;
 	const float speed = 2;
 	const int speedLimit = 2;
 	const float slip = 0.9;
