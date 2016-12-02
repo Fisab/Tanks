@@ -32,16 +32,31 @@ Player::Player(sf::Vector2f pos_)
 	trailSprite.setColor(sf::Color(169, 169, 169, 255));
 }
 
+int Player::getSign(int a) {
+	if (a < 0) return -1;
+	else return 1;
+}
+
 long double Player::radToDeg(long double a) {
 	return a * 180 / M_PI;
 }
 
-void Player::process(sf::RenderWindow& window, float time, sf::Event *event) {
-	if (towerAngle > M_PI * 2) towerAngle = 0;
-	else if (towerAngle < 0) towerAngle = M_PI * 2;
+long double Player::abs(long double a) {
+	if (a < 0) return a * -1;
+	else return a;
+}
 
-	if (angle > M_PI * 2) angle = 0;
-	else if (angle < 0) angle = M_PI * 2;
+long double Player::getMin(long double a, long double b) {
+	if (a > b) return b;
+	else return a;
+}
+
+void Player::process(sf::RenderWindow& window, float time, sf::Event *event) {
+	//if (towerAngle > M_PI * 2) towerAngle = 0;
+	//else if (towerAngle < 0) towerAngle = M_PI * 2;
+
+	//if (angle > M_PI * 2) angle = 0;
+	//else if (angle < 0) angle = M_PI * 2;
 
 	rotateTower(window.mapPixelToCoords(sf::Mouse::getPosition(window)), time);
 	Player::move(time);
@@ -88,24 +103,15 @@ void Player::move(float time) {
 }
 
 void Player::rotateTower(sf::Vector2f posMouse, float time) {
-	//std::cout << angle << std::endl;
+	double needAngle = atan2(posMouse.y - pos.y, posMouse.x - pos.x);
 
-	long double a1 = atan2(pos.y, pos.x);// -angle;
-	long double a2 = atan2(posMouse.y - pos.y, posMouse.x - pos.x);
+	double a = fmod(towerAngle - needAngle - angle, M_PI * 2);
 
-	long double a3 = a2 - towerAngle;
+	int asign = getSign(a);
+	a = abs(a);
 
-	if (a3 > M_PI / 2) a3 -= M_PI * 2;
-	else if (a3 < -1 * M_PI) a3 += M_PI * 2;
+	towerAngle -= getMin(rotateTowerSpeed, a) * (a > M_PI ? -asign : asign);
 
-	int dir = 0;
-	if (a3 - a1 > -M_PI/1000 && a3 - a1 < M_PI / 1000) return;
-	if (a3 - a1 < 0) dir = -1;
-	if (a3 - a1 > 0) dir = 1;
-
-	towerAngle += rotateTowerSpeed * time * dir;
-
-	//towerSprite.setRotation(radToDeg(startAngle + towerAngle));
 	towerSprite.setRotation(radToDeg(angle + startAngle + towerAngle));
 }
 
