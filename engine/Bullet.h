@@ -10,7 +10,7 @@
 class Bullet
 {
 public:
-	Bullet(sf::Vector2f pos_, double a, int color);
+	Bullet(sf::Vector2f pos_, double a, int color, sf::Texture &texture);
 	~Bullet();
 
 	void process(sf::RenderWindow& window, float time);
