@@ -2,13 +2,11 @@
 
 
 
-Bullet::Bullet(sf::Vector2f pos_, double a, int color)
+Bullet::Bullet(sf::Vector2f pos_, double a, int color, sf::Texture &texture)
 {
 	pos = pos_;
 	angle = a;
 
-	texture.loadFromFile(colors[color]);
-	texture.setSmooth(true);
 	sprite.setTexture(texture);
 	sprite.setPosition(pos);
 	sprite.setScale(0.5, 0.5);
@@ -23,8 +21,6 @@ double Bullet::radToDeg(long double a) {
 }
 
 void Bullet::process(sf::RenderWindow& window, float time) {
-	if(time > 20) sprite.setTexture(texture);
-
 	curSpeed = sqrt(vel.x*vel.x + vel.y*vel.y);
 	if (curSpeed < speedLimit) {
 		vel.x += speed * cos(angle);
