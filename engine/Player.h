@@ -36,7 +36,7 @@ private:
 	long double getMin(long double a, long double b);
 	int getSign(int a);
 
-	const float rotateSpeed = M_PI / 5000;
+	const float rotateSpeed = M_PI / 4500;
 	const float rotateTowerSpeed = M_PI / 3500;
 	const float speed = 2;
 	const int speedLimit = 2;
@@ -46,6 +46,8 @@ private:
 
 	void makeTrail();
 	float intervalTrail = 0;
+
+	sf::Texture bulletTexture;
 
 	sf::Texture playerTexture;
 	sf::Sprite playerSprite;
@@ -82,7 +84,7 @@ private:
 
 	std::vector<trail> trails;
 	std::vector<smoke> smokes;
-	std::vector<Bullet*> bullets;
+	std::vector<Bullet> bullets;
 };
 
 #endif
