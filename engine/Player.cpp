@@ -39,6 +39,9 @@ Player::Player(sf::Vector2f pos_)
 	smokeSprite.setTexture(smokeTexture0);
 	smokeSprite.setColor(sf::Color(217, 217, 217, 255));
 	smokeSprite.setOrigin(smokeTexture0.getSize().x / 2, smokeTexture0.getSize().y / 2);
+
+	bulletTexture.loadFromFile("data/images/Bullets/bulletGreen_outline.png");
+	bulletTexture.setSmooth(true);
 }
 
 int Player::getSign(int a) {
@@ -89,10 +92,10 @@ void Player::process(sf::RenderWindow& window, float time, sf::Event *event) {
 
 void Player::bulletsProcess(sf::RenderWindow& window, float time) {
 	for (int i = 0; i < bullets.size(); i++) {
-		bullets[i]->process(window, time);
+		bullets[i].process(window, time);
 	}
 	for (int i = bullets.size() - 1; i >= 0; i--) {
-		if (bullets[i]->lifeTime <= 0) {
+		if (bullets[i].lifeTime <= 0) {
 			bullets.erase(bullets.begin() + i);
 		}
 	}
@@ -134,9 +137,9 @@ void Player::shoot(float time) {
 		smokes[smokes.size() - 1].scale += 0.1;
 		smokes[smokes.size() - 1].sprite.setScale(smokes[smokes.size() - 1].scale, smokes[smokes.size() - 1].scale);
 
-		bullets.push_back(new Bullet(pos, towerAngle + angle, 2));
+		bullets.push_back(Bullet(pos, towerAngle + angle, 2, bulletTexture));
 
-		shootTick = 20;
+		shootTick = 30;
 	}
 }
 
@@ -192,7 +195,7 @@ void Player::processSmoke() {
 			smokes[i].sprite.setTextureRect(sf::IntRect(0, 0, smokeTexture1.getSize().x, smokeTexture1.getSize().y));
 			smokes[i].sprite.setOrigin(smokeTexture1.getSize().x / 2, smokeTexture1.getSize().y / 2);
 		}
-		else if (smokes[i].opacity == 85) {
+		else if (smokes[i].opacity <= 85) {
 			smokes[i].sprite.setTexture(smokeTexture2);
 			smokes[i].sprite.setScale(smokes[i].scale, smokes[i].scale);
 			smokes[i].sprite.setTextureRect(sf::IntRect(0, 0, smokeTexture2.getSize().x, smokeTexture2.getSize().y));
@@ -221,8 +224,8 @@ void Player::draw(sf::RenderWindow &window) {
 
 	for (int i = 0; i < smokes.size(); i++) {
 		smokes[i].sprite.setColor(sf::Color(169, 169, 169, smokes[i].opacity));
-		smokes[i].opacity--;
-		smokes[i].scale += 0.0025;
+		smokes[i].opacity-=2;
+		smokes[i].scale += 0.0055;
 		smokes[i].sprite.setScale(smokes[i].scale, smokes[i].scale);
 		window.draw(smokes[i].sprite);
 	}
