@@ -1,12 +1,14 @@
 #ifndef WORLD_H
 #define WORLD_H
-#pragma comment(lib, "pugixmld.lib")
+#pragma comment(lib, "pugixml.lib")
 
 #include "pugixml.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
 #include <map>
+
+#include <iostream>
 
 using std::string;
 using std::vector;
@@ -18,11 +20,11 @@ public:
 	World();
 	~World();
 
-	int getWidthMap();
-	int getHeightMap();
+	int MAP_HEIGHT;
+	int MAP_WIDTH;
 
 	bool loadMap(char* mapName);
-	void drawMap(sf::RenderWindow&);
+	void drawMap(sf::RenderWindow &window);
 
 	struct Tileset {
 		int firstGid;
@@ -34,13 +36,12 @@ public:
 
 	struct Layer {
 		int width, height;
+		string name;
 
 		vector<int> layer;
 	};
 
 private:
-	int MAP_HEIGHT;
-	int MAP_WIDTH;
 
 	int countTiles;
 
@@ -51,7 +52,8 @@ private:
 
 	vector<Layer> layers;
 
-	int x, y;
+	int cellsLimit = 10;
+	void drawLimitScreen(sf::RenderWindow &window);
 };
 
 #endif
