@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <iostream>
+
 Camera::Camera(sf::Vector2f screenSize_, sf::Vector2f cameraPos_) {
 	screenSize = screenSize_;
 	cameraPos = cameraPos_;
@@ -7,14 +9,16 @@ Camera::Camera(sf::Vector2f screenSize_, sf::Vector2f cameraPos_) {
 }
 
 void Camera::update(sf::Vector2f pos) {
-	if (moveWheel == 1 && zoom < 1.5) {
-		zoom += 0.05;
+	if (moveWheel == 1 && zoom > 0.75) {
+		zoom -= 0.05;
+		//camera.zoom(zoom);
 		camera.reset(sf::FloatRect(0, 0, zoom*screenSize.x, zoom*screenSize.y));
 		moveWheel = 0;
 	}
-	else if (moveWheel == -1 && zoom > 0.5) {
-		zoom -= 0.05;
+	else if (moveWheel == -1 && zoom < 1.5) {
+		zoom += 0.05;
 		camera.reset(sf::FloatRect(0, 0, zoom*screenSize.x, zoom*screenSize.y));
+		//camera.zoom(zoom);
 		moveWheel = 0;
 	}
 	cameraPos = pos;
