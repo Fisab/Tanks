@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	sf::RenderWindow window(sf::VideoMode(screenSize[0], screenSize[1]), "Tanks");
 	window.setActive(true);
 	window.setMouseCursorVisible(false);
-	window.setFramerateLimit(fps);
+	window.setFramerateLimit(60);
 
 	Menu *menu = new Menu(window, sf::Vector2i(screenSize[0], screenSize[1]));
 	menu->process();
@@ -48,9 +48,9 @@ int main(int argc, char *argv[])
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if (event.type == sf::Event::MouseWheelMoved) {
-				camera.moveWheel = event.mouseWheel.delta;
-			}
+			//else if (event.type == sf::Event::MouseWheelMoved) {
+			//	camera.moveWheel = event.mouseWheel.delta;
+			//}
 		}
 
 		camera.update(tank.pos);
