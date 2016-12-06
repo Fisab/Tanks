@@ -84,7 +84,7 @@ private:
 
 	std::vector<trail> trails;
 	std::vector<smoke> smokes;
-	std::vector<Bullet> bullets;
+	std::vector<Bullet*> bullets;
 };
 
 #endif
