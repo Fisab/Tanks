@@ -92,11 +92,15 @@ void Player::process(sf::RenderWindow& window, float time, sf::Event *event) {
 
 void Player::bulletsProcess(sf::RenderWindow& window, float time) {
 	for (int i = 0; i < bullets.size(); i++) {
-		bullets[i].process(window, time);
+		bullets[i]->process(window, time);
 	}
-	for (int i = bullets.size() - 1; i >= 0; i--) {
-		if (bullets[i].lifeTime <= 0) {
-			bullets.erase(bullets.begin() + i);
+	for (std::vector<Bullet*>::iterator i = bullets.begin(); i != bullets.end();) {
+		if ((*i)->lifeTime <= 0) {
+			delete *i;
+			i = bullets.erase(i);
+		}
+		else {
+			i++;
 		}
 	}
 }
@@ -137,7 +141,7 @@ void Player::shoot(float time) {
 		smokes[smokes.size() - 1].scale += 0.1;
 		smokes[smokes.size() - 1].sprite.setScale(smokes[smokes.size() - 1].scale, smokes[smokes.size() - 1].scale);
 
-		bullets.push_back(Bullet(pos, towerAngle + angle, 2, bulletTexture));
+		bullets.push_back(new Bullet(pos, towerAngle + angle, 2, bulletTexture, towerTexture.getSize().x));
 
 		shootTick = 30;
 	}
