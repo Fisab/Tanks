@@ -2,10 +2,13 @@
 
 
 
-Bullet::Bullet(sf::Vector2f pos_, double a, int color, sf::Texture &texture)
+Bullet::Bullet(sf::Vector2f pos_, double a, int color, sf::Texture &texture, float sizeBarrel)
 {
-	pos = pos_;
 	angle = a;
+
+	pos = pos_;
+	pos.x = pos_.x + cos(angle) * sizeBarrel;
+	pos.y = pos_.y + sin(angle) * sizeBarrel;
 
 	sprite.setTexture(texture);
 	sprite.setPosition(pos);
